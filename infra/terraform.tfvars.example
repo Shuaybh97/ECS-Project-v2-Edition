@@ -1,0 +1,16 @@
+# Project Configuration
+project_name = "my-ecs-app"
+environment  = "dev"
+aws_region   = "us-east-1"
+
+# Application Configuration  
+container_image = "nginx:latest"
+container_port  = 80
+
+# Domain Configuration (optional)
+# Uncomment and configure these if you want to use a custom domain
+# domain_name              = "example.com"
+# create_hosted_zone       = true  # Set to false if you have an existing hosted zone
+# enable_ssl               = true
+# subject_alternative_names = ["www.example.com", "api.example.com"]
+# create_www_record        = true
