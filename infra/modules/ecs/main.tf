@@ -75,7 +75,7 @@ resource "aws_ecs_service" "app" {
   }
 }
 
-# CloudWatch Log Group
+
 resource "aws_cloudwatch_log_group" "ecs" {
   name              = "/ecs/${var.project_name}"
   retention_in_days = var.log_retention_in_days
@@ -85,7 +85,7 @@ resource "aws_cloudwatch_log_group" "ecs" {
   }
 }
 
-# Security Group for ECS Tasks
+
 resource "aws_security_group" "ecs_tasks" {
   name        = "${var.project_name}-ecs-tasks-sg"
   description = "Security group for ECS tasks"
@@ -160,9 +160,8 @@ resource "aws_iam_role" "ecs_task_role" {
   }
 }
 
-# DynamoDB policy for ECS task role
+
 resource "aws_iam_role_policy" "ecs_task_dynamodb_policy" {
-  count = var.dynamodb_table_arn != null ? 1 : 0
   name  = "${var.project_name}-ecs-task-dynamodb-policy"
   role  = aws_iam_role.ecs_task_role.id
 

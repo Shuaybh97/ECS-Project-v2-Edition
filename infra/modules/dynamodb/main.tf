@@ -5,9 +5,12 @@ resource "aws_dynamodb_table" "main" {
   hash_key     = var.hash_key
   range_key    = var.range_key
 
-  attribute {
-    name = attr.name
-    type = attr.type
+  dynamic "attribute" {
+    for_each = var.attributes
+    content {
+      name = attribute.value.name
+      type = attribute.value.type
+    }
   }
 
   tags = {
@@ -15,3 +18,4 @@ resource "aws_dynamodb_table" "main" {
     Environment = var.environment
   }
 }
+

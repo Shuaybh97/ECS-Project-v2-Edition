@@ -21,9 +21,10 @@ variable "environment" {
 }
 
 variable "attributes" {
-  description = "List of attributes for the DynamoDB table"
-  type = list(object({
+  description = "Map of attribute definitions for the DynamoDB table. Each value is an object with 'name' and 'type' (e.g., S, N, B)."
+  type = map(object({
     name = string
     type = string
   }))
+  default = {}
 }

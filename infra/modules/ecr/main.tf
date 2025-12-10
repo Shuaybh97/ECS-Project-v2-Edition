@@ -1,4 +1,3 @@
-# ECR Repository
 resource "aws_ecr_repository" "main" {
   name                 = var.repository_name
   image_tag_mutability = var.image_tag_mutability
@@ -12,6 +11,8 @@ resource "aws_ecr_repository" "main" {
     kms_key         = var.kms_key_id
   }
 
+  force_delete = true
+  
   tags = {
     Name = "${var.project_name}-ecr-repo"
   }

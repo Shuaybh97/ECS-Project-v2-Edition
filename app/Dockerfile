@@ -9,7 +9,7 @@ ENV PYTHONPATH=/app \
     TABLE_NAME=changeme
 WORKDIR /app
 COPY --from=build /out /usr/local
-COPY --from=build /w/src /app
+COPY --from=build /app/src /app
 USER 65532:65532
 EXPOSE 8080
 CMD ["-m", "uvicorn", "main:app", "--host=0.0.0.0", "--port=8080"]

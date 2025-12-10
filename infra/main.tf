@@ -15,14 +15,15 @@ module "dynamodb" {
 
   table_name = "${local.full_project_name}-table"
   hash_key   = "url"
-  
-  attributes = [
-    {
+
+  attributes = {
+    "url" = {
       name = "url"
       type = "S"
     }
-  ]
+  }
   
+  # tagging
   environment = var.environment
 }
 
@@ -73,13 +74,11 @@ module "ecs" {
   private_subnet_ids = module.vpc.private_subnet_ids
   
   target_group_arn      = module.alb.target_group_arn
-  alb_security_group_id = module.alb.security_group_id
-  
-  # DynamoDB Integration
+
   dynamodb_table_arn = module.dynamodb.table_arn
   
   container_name  = "app"
-  container_image = var.container_image
+  container_image = "${module.ecr.repository_url}:latest"
   container_port  = var.container_port
   
   cpu    = "256"
@@ -91,16 +90,23 @@ module "ecs" {
   
   environment_variables = [
     {
-      name  = "ENVIRONMENT"
-      value = var.environment
+      name  = "PYTHONPATH"
+      value = "/app"
     },
     {
       name  = "TABLE_NAME"
       value = module.dynamodb.table_name
-    },
-    {
-      name  = "AWS_DEFAULT_REGION"
-      value = var.aws_region
     }
   ]
+}
+
+module "app_ecr" {
+  source = "./modules/ecr"
+
+  project_name    = local.full_project_name
+  repository_name = "${local.full_project_name}-ecr"
+
+  image_tag_mutability = "IMMUTABLE"
+  scan_on_push         = true
+  encryption_type      = "AES256"
 }
